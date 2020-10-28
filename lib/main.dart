@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import 'package:bh_adv_00/adv-game.dart';
 import 'package:bh_adv_00/game-controller.dart';
+import 'package:bh_adv_00/widgets/joypad.dart';
+import 'package:bh_adv_00/widgets/button.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +30,40 @@ void main() async {
       child: Stack(
         children: [
           game.widget,
-          GameController(game: game),
+          //GameController(game: game),
+          Column(
+            children: [
+              Spacer(),
+              Row(
+                children: [
+                  SizedBox(width: 48),
+                  Button(
+                    onTap: game.onButtonTap,
+                  ),
+                  Spacer(),
+                  Button(
+                    onTap: game.onButtonTap,
+                  ),
+                  SizedBox(width: 48),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  SizedBox(width: 48),
+                  Joypad(
+                    onChange: game.onLeftJoypadChange,
+                  ),
+                  Spacer(),
+                  Joypad(
+                    onChange: (Offset delta) => print(delta),
+                  ),
+                  SizedBox(width: 48),
+                ],
+              ),
+              SizedBox(height: 24),
+            ],
+          ),
         ],
       ),
     ),

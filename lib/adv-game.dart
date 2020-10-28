@@ -2,8 +2,9 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:bh_adv_00/components/hero.dart';
+import 'package:bh_adv_00/components/my-hero.dart';
 import 'package:bh_adv_00/components/monster.dart';
 import 'package:bh_adv_00/helpers/directions.dart';
 
@@ -12,7 +13,7 @@ class AdvGame extends Game {
   double tileSize;
   Random rnd;
 
-  Hero hero;
+  MyHero hero;
   List<Monster> monsters;
 
   String lastMove = '';
@@ -32,7 +33,7 @@ class AdvGame extends Game {
 
   void prepare() {
     print("In prepare, screenSize.width=${screenSize.width}, screenSize.height=${screenSize.height}");
-    hero = Hero(this,
+    hero = MyHero(this,
         position: Offset(
           screenSize.width / 2,
           screenSize.height / 2,
@@ -74,34 +75,24 @@ class AdvGame extends Game {
     if (hero != null) {
       hero.update(t);
     }
-
-    if (lastMove == 'x') {
-      if (xMovement < 0) {
-        hero.direction = Direction.left;
-        hero.position = hero.position.translate(-100 * t, 0);
-      }
-      if (xMovement > 0) {
-        hero.direction = Direction.right;
-        hero.position = hero.position.translate(100 * t, 0);
-      }
-    }
-    if (lastMove == 'y') {
-      if (yMovement < 0) {
-        hero.direction = Direction.up;
-        hero.position = hero.position.translate(0, -100 * t);
-      }
-      if (yMovement > 0) {
-        hero.direction = Direction.down;
-        hero.position = hero.position.translate(0, 100 * t);
-      }
-    }
-
     monsters.forEach((Monster monster) => monster.update(t));
   }
 
   void resize(Size size) {
     screenSize = size;
     tileSize = screenSize.width / 9;
+  }
+
+  void onLeftJoypadChange(Offset offset) {
+    if (offset == Offset.zero) {
+      hero.targetBodyAngle = null;
+    } else {
+      hero.targetBodyAngle = offset.direction;
+    }
+  }
+
+  void onButtonTap() {
+
   }
 
   void onTapDown(TapDownDetails d) {
