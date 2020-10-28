@@ -24,6 +24,80 @@ void main() async {
   await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 */
   AdvGame game = AdvGame();
+
+  runApp(
+    MaterialApp(
+      title: 'BH\'s Advanture!',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned.fill(
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Stack(
+                  children: [
+                    game.widget,
+                    //GameController(game: game),
+                    Column(
+                      children: [
+                        Spacer(),
+                        Row(
+                          children: [
+                            SizedBox(width: 48),
+                            Joypad(
+                              onChange: game.onLeftJoypadChange,
+                            ),
+                            Spacer(),
+                            Row(
+                              children: [
+                                Column(
+                                  children:[
+                                    Button(
+                                      name: 'Button1',
+                                      diameter: 32,
+                                      onTap: game.onButtonTap,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Button(
+                                  name: 'Button2',
+                                  diameter: 32,
+                                  onTap: game.onButtonTap,
+                                ),
+                                SizedBox(height: 12),
+                                Button(
+                                  name: 'Button3',
+                                  diameter: 48,
+                                  onTap: game.onButtonTap,
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 48),
+                          ],
+                        ),
+                        SizedBox(height: 24),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
+    ),
+  );
+
+  /*
   runApp(
     Directionality(
       textDirection: TextDirection.ltr,
@@ -68,6 +142,7 @@ void main() async {
       ),
     ),
   );
+  */
 
   TapGestureRecognizer tapper = TapGestureRecognizer();
   tapper.onTapDown = game.onTapDown;

@@ -92,7 +92,7 @@ class AdvGame extends Game {
   }
 
   void onButtonTap() {
-
+    print('button is pressed');
   }
 
   void onTapDown(TapDownDetails d) {

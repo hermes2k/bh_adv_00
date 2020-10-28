@@ -42,12 +42,8 @@ class MyHero {
     }
 
     final double rotationRate = pi * t;
-
-    if (bodyAngle == targetBodyAngle) {
-      position = position + Offset.fromDirection(bodyAngle, 100 * t);
-    } else {
-      position = position + Offset.fromDirection(bodyAngle, 50 * t);
-    }
+    double speed = 180;
+    position = position + Offset.fromDirection(bodyAngle, speed * t);
 
     if (targetBodyAngle != null) {
       if (bodyAngle < targetBodyAngle) {
