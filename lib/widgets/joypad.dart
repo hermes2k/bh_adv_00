@@ -15,6 +15,17 @@ class Joypad extends StatefulWidget {
 class JoypadState extends State<Joypad> {
   Offset delta = Offset.zero;
 
+  static const double outerSize = 120;
+  static const double innerSize = outerSize / 2;
+
+  double outerCircleDiameter = outerSize;
+  double outerCircleRadius = outerSize / 2;
+  Color outerCircleColor = Color(0x88ffffff);
+
+  double innerCircleDiameter = innerSize;
+  double innerCircleRadius = innerSize / 2;
+  Color innerCircleColor = Color(0xccffffff);
+
   void updateDelta(Offset newDelta) {
     widget.onChange(newDelta);
     setState(() {
@@ -23,39 +34,44 @@ class JoypadState extends State<Joypad> {
   }
 
   void calculateDelta(Offset offset) {
-    Offset newDelta = offset - Offset(60, 60);
+    double maxMovement = (outerCircleRadius - innerCircleRadius);
+
+    // offset is originated from localPosition
+    Offset newDelta = offset - Offset(outerCircleRadius, outerCircleRadius);
+    print('offset=$offset, newDelta=$newDelta,(distance=${newDelta.distance}, direction=${newDelta.direction})');
+
     updateDelta(
       Offset.fromDirection(
         newDelta.direction,
-        min(30, newDelta.distance),
+        min(maxMovement, newDelta.distance),
       ),
     );
   }
 
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
-      width: 120,
+      height: outerCircleDiameter,
+      width: outerCircleDiameter,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
+          borderRadius: BorderRadius.circular(outerCircleRadius),
         ),
         child: GestureDetector(
           child: Container(
             decoration: BoxDecoration(
-              color: Color(0x88ffffff),
-              borderRadius: BorderRadius.circular(60),
+              color: outerCircleColor,
+              borderRadius: BorderRadius.circular(outerCircleRadius),
             ),
             child: Center(
               child: Transform.translate(
                 offset: delta,
                 child: SizedBox(
-                  height: 60,
-                  width: 60,
+                  height: innerCircleDiameter,
+                  width: innerCircleDiameter,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xccffffff),
-                      borderRadius: BorderRadius.circular(30),
+                      color: innerCircleColor,
+                      borderRadius: BorderRadius.circular(innerCircleRadius),
                     ),
                   ),
                 ),
@@ -71,10 +87,12 @@ class JoypadState extends State<Joypad> {
   }
 
   void onDragDown(DragDownDetails d) {
+    print('onDragDown: ${d.globalPosition}, ${d.localPosition}');
     calculateDelta(d.localPosition);
   }
 
   void onDragUpdate(DragUpdateDetails d) {
+    print('onDragUpdate: ${d.globalPosition}, ${d.localPosition}, ${d.delta}');
     calculateDelta(d.localPosition);
   }
 

@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  final void Function() onTap;
+  static const String DEFAULT_PATH_TO_BUTTON = 'assets/images/icons/attack.png';
+
+  final void Function() onTapCallback;
   final double diameter;
   final String name;
+  double radius;
+  Color color;
+  String pathToImage;
 
-  const Button({
+  Button({
     Key key,
     @required this.name,
     @required this.diameter,
-    @required this.onTap,
-  }) : super(key: key);
+    @required this.onTapCallback,
+    String pathToImage
+  }) : super(key: key) {
+    this.radius = diameter / 2;
+    this.color = Color(0x88ffffff);
+    if (pathToImage != null) {
+      this.pathToImage = pathToImage;
+    } else {
+      this.pathToImage = DEFAULT_PATH_TO_BUTTON;
+    }
+  }
 
   void onTapButton() {
-    print('${name}');
-    onTap();
+    print('$name');
+    onTapCallback();
   }
 
   @override
@@ -24,13 +38,32 @@ class Button extends StatelessWidget {
       width: diameter,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(radius),
         ),
         child: GestureDetector(
           child: Container(
             decoration: BoxDecoration(
-              color: Color(0x88ffffff),
-              borderRadius: BorderRadius.circular(32),
+              border: new Border.all(
+                color: Colors.grey,
+                width: 1.0,
+                style: BorderStyle.solid
+              ),
+              color: color,
+              borderRadius: BorderRadius.circular(radius),
+              image: new DecorationImage(
+                image: new AssetImage(pathToImage),
+                fit: BoxFit.contain,
+              ),
+              /*
+              boxShadow: [
+                new BoxShadow(
+                  color: Colors.white,
+                  offset: new Offset(10.0, 5.0),
+                  blurRadius: 1.0,
+                  spreadRadius: 1.0,
+                ),
+              ],
+              */
             ),
           ),
           onTap: onTapButton,
